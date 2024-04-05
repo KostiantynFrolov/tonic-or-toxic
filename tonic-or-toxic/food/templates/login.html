@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Login
+{% endblock title %}
+
+{% block main %}
+  {% if messages %}
+    <div class="error-message">
+      {% for message in messages %}
+        {{ message }}
+      {% endfor %}
+    </div>
+  {% endif %}
+  <form action="" method="post">
+    {% csrf_token %}
+    <div class="form-control">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+    </div>
+    <div class="form-control">
+        {{ form.password.label_tag }}
+        {{ form.password }}
+    </div>
+    <div class="button-container">
+        <button class='button-link' type="submit">Login</button>
+    </div>
+  </form>
+{% endblock main %}
+

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Result
+{% endblock title %}
+
+{% block main %}
+  {% if result %}
+    <p><strong>Name:</strong> {{ result.toxicant_en.name }}</p>
+    <p><strong>Description:</strong> {{ result.toxicant_en.description }}</p>
+    <p><strong>Level of harmfulness:</strong> {{ result.get_scale_display }}</p>
+    <p><strong>Medical risks:</strong> {{ result.toxicant_en.medical_risks }}</p>
+  {% else %}
+    <p>There is no harmful food additive like this in our database!</p>
+  {% endif %}
+    <div class="button-container">
+      <a href="{% url 'dashboard' %}" class="button-link">Back to the dashboard</a>
+    </div>
+{% endblock %}

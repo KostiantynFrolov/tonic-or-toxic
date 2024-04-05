@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Dashboard
+{% endblock title %}
+
+{% block main %}
+    <div class="button-container special">
+      <a href="{% url 'search_additive' %}" class="button-link special">Concerned about
+          food additive?<br>Search by name!</a>
+      <a href="{% url 'search_additives' %}" class="button-link special">Checking several food additives?<br>
+          Try our multi-name search!</a>
+    </div>
+    <p class="long-text">Our website's "Tonic or Toxic" rating system for harmful additives provides users
+        with valuable insights into the safety of various ingredients. Utilizing a comprehensive
+        approach, we base our ratings on a meticulous review of scientific evidence sourced from
+        esteemed peer-reviewed literature, alongside data from authoritative entities like
+        the U.S. Food and Drug Administration (FDA), the European Food Safety Authority (EFSA),
+        and the World Health Organization (WHO). This thorough examination encompasses toxicological,
+        epidemiological, and exposure data, ensuring a holistic understanding of each additive's
+        potential impact on health. Additionally, we consider factors such as data reliability,
+        uncertainties, and the additive's benefits, while also recognizing the unique
+        vulnerabilities of certain groups, such as children or pregnant individuals. By synthesizing this
+        wealth of information, our rating system aims to empower users to make informed choices about
+        the substances they consume, promoting a healthier and safer lifestyle.</p>
+{% endblock main %}

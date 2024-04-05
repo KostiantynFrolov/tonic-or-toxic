@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Search additive
+{% endblock title %}
+
+{% block main %}
+  {% if form.additive_name.errors %}
+    <ul class="error-message">
+      {% for error in form.additive_name.errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  <form action="" method="post">
+    {% csrf_token %}
+    <div class="form-control">
+        {{ form.additive_name.label_tag }}
+        {{ form.additive_name }}
+        <div class="help-text">Please provide
+            the name of the food additive you wish to check</div>
+    </div>
+    <div class="form-control select">
+        {{ form.language.label_tag }}
+        {{ form.language }}
+        <div class="help-text">Please choose the language
+            for the name of the food additive</div>
+    </div>
+    <div class="button-container">
+        <button class='button-link' type="submit">Search</button>
+    </div>
+    </form>
+
+
+{% endblock main %}
