@@ -13,7 +13,7 @@ Result
   {% else %}
     <p>There is no harmful food additive like this in our database!</p>
   {% endif %}
-    <div class="button-container">
-      <a href="{% url 'dashboard' %}" class="button-link">Back to the dashboard</a>
+    <div class="button-container centered">
+      <a href="{% url 'food:dashboard' %}" class="button-link">Back to the dashboard</a>
     </div>
 {% endblock %}

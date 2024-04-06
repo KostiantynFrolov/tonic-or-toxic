@@ -9,7 +9,6 @@ from .forms import (SignupForm, LoginForm, SearchAdditiveForm, SearchAdditivesFo
 from .models import ToxicantEN, ToxicantPL, Toxicant
 from django.contrib import messages
 from paddleocr import PaddleOCR
-import os
 import tkinter
 from tkinter import filedialog
 
@@ -17,7 +16,7 @@ from tkinter import filedialog
 class HomepageView(View):
     def get(self, request):
         if request.user.is_authenticated:
-            return redirect('dashboard')
+            return redirect('food:dashboard')
         else:
             return render(request, 'homepage.html')
 
@@ -25,7 +24,7 @@ class HomepageView(View):
 class SignupView(CreateView):
     form_class = SignupForm
     template_name = 'signup.html'
-    success_url = reverse_lazy('dashboard')
+    success_url = reverse_lazy('food:homepage')
 
 
 class LoginView(View):
@@ -41,7 +40,7 @@ class LoginView(View):
             user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user is not None:
                 login(request, user)
-                return redirect('dashboard')
+                return redirect('food:dashboard')
             else:
                 messages.error(request, 'Invalid username or password')
                 return render(request, self.html, {'form': self.form})
@@ -50,22 +49,22 @@ class LoginView(View):
 
 
 class LogoutView(LoginRequiredMixin, View):
-    login_url = '/login/'
+    login_url = 'food:login'
 
     def get(self, request):
         logout(request)
-        return redirect('homepage')
+        return redirect('food:homepage')
 
 
 class DashboardView(LoginRequiredMixin, View):
-    login_url = '/login/'
+    login_url = 'food:login'
 
     def get(self, request):
         return render(request, 'dashboard.html')
 
 
 class SearchAdditiveView(LoginRequiredMixin, View):
-    login_url = '/login_url'
+    login_url = 'food:login'
     form = SearchAdditiveForm
     html = 'search_additive.html'
 
@@ -75,7 +74,7 @@ class SearchAdditiveView(LoginRequiredMixin, View):
     def post(self, request):
         form = self.form(request.POST)
         if form.is_valid():
-            if form.cleaned_data['language'] == '1':
+            if form.cleaned_data['language'] == 'eng':
                 result = ToxicantEN.objects.filter(names__icontains=form.cleaned_data['additive_name'].strip()).first()
                 if result:
                     result = Toxicant.objects.get(toxicant_en=result)
@@ -97,7 +96,7 @@ class SearchAdditivesView(SearchAdditiveView):
         if form.is_valid():
             additive_names_split = form.cleaned_data['additive_names'].split(',')
             results = []
-            if form.cleaned_data['language'] == '1':
+            if form.cleaned_data['language'] == 'eng':
                 for additive_name in additive_names_split:
                     result = ToxicantEN.objects.filter(names__icontains=additive_name.strip()).first()
                     if result:
@@ -115,12 +114,13 @@ class SearchAdditivesView(SearchAdditiveView):
 
 
 class AdditiveDetailsView(LoginRequiredMixin, View):
+    login_url = 'food:login'
     def get(self, request, additive_id):
-        return render(request, 'result.html', {'result': Toxicant.objects.get(id=additive_id)})
+        return render(request, 'result.html', {'result': Toxicant.objects.get(pk=additive_id)})
 
 
 class SearchAdditivesByPhoto(LoginRequiredMixin, View):
-    login_url = '/login_url'
+    login_url = 'food:login'
     form = SelectLanguageForm
     html = 'search_additives_by_photo.html'
 

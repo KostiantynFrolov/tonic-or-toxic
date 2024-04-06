@@ -58,6 +58,10 @@
             margin-top: 3em;
         }
 
+        .centered {
+            justify-content: center;
+        }
+
         .button-link {
             display: inline-block;
             padding: 12px 24px;

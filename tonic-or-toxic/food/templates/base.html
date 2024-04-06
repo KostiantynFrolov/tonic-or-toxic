@@ -17,10 +17,10 @@
         </div>
         <div class="right">
             {% if user.is_authenticated %}
-            <a href="{% url 'logout' %}" class="button-link">Done?<br> It's time to logout!</a>
+            <a href="{% url 'food:logout' %}" class="button-link">Done?<br> It's time to logout!</a>
             {% else %}
-            <a href="{% url 'signup' %}" class="button-link">First visit?<br> Let's get you signed up!</a>
-            <a href="{% url 'login' %}" class="button-link">Missed us?<br> Let's get you logged in!</a>
+            <a href="{% url 'food:signup' %}" class="button-link">First visit?<br> Let's get you signed up!</a>
+            <a href="{% url 'food:login' %}" class="button-link">Missed us?<br> Let's get you logged in!</a>
             {% endif %}
         </div>
     </header>
@@ -35,7 +35,7 @@
             {% if user.is_authenticated %}
             Contact:   frolov.kostiantyn@gmail.com
             {% else %}
-            Version 1.2
+            Version 1.3
             {% endif %}
         </div>
     </footer>

@@ -6,11 +6,11 @@ Dashboard
 
 {% block main %}
     <div class="button-container special">
-      <a href="{% url 'search_additive' %}" class="button-link special">Concerned about
+      <a href="{% url 'food:search_additive' %}" class="button-link special">Concerned about
           food additive?<br>Search by name!</a>
-      <a href="{% url 'search_additives' %}" class="button-link special">Checking several food additives?<br>
+      <a href="{% url 'food:search_additives' %}" class="button-link special">Checking several food additives?<br>
           Experience our multi-name search!</a>
-      <a href="{% url 'search_additives_by_photo' %}" class="button-link special">Unlock the power of visual search!<br>
+      <a href="{% url 'food:search_additives_by_photo' %}" class="button-link special">Unlock the power of visual search!<br>
       Try our AI-driven solution!</a>
     </div>
     <p class="long-text">Our website's "Tonic or Toxic" rating system for harmful additives provides users

@@ -16,12 +16,6 @@ class SignupForm(UserCreationForm):
         model = User
         fields = ('username', 'email', 'password1', 'password2')
 
-        def save(self, commit=True):
-            user = super(CustomUserCreationForm, self).save(commit=False)
-            user.email = self.cleaned_data['email']
-            if commit:
-                user.save()
-            return user
 
 
 class LoginForm(forms.Form):
@@ -29,7 +23,7 @@ class LoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput, required=True)
 
 class SelectLanguageForm(forms.Form):
-    language = forms.ChoiceField(choices=((1, 'English'), (2, 'Polish')))
+    language = forms.ChoiceField(choices=(('eng', 'English'), ('pl', 'Polish')))
 
 
 class SearchAdditiveForm(SelectLanguageForm):
