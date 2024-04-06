@@ -53,13 +53,9 @@
 
         .button-container {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             margin-bottom: 5em;
             margin-top: 3em;
-        }
-
-        .button-container.special {
-            justify-content: flex-start;
         }
 
         .button-link {

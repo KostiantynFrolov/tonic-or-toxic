@@ -28,17 +28,13 @@ class LoginForm(forms.Form):
     username = forms.CharField(required=True)
     password = forms.CharField(widget=forms.PasswordInput, required=True)
 
-
-Languages = (
-    (1, 'English'),
-    (2, 'Polish')
-)
+class SelectLanguageForm(forms.Form):
+    language = forms.ChoiceField(choices=((1, 'English'), (2, 'Polish')))
 
 
-class SearchAdditiveForm(forms.Form):
+class SearchAdditiveForm(SelectLanguageForm):
     additive_name = forms.CharField(required=True, max_length=50,
                                     error_messages={'required': "Food additive name cannot be an empty string!"})
-    language = forms.ChoiceField(choices=Languages)
 
 
 def validate_comma_and_empty_name(names):
@@ -48,7 +44,6 @@ def validate_comma_and_empty_name(names):
         if len(name.strip()) == 0:
             raise forms.ValidationError("Food additive name cannot be an empty string!")
 
-class SearchAdditivesForm(forms.Form):
+class SearchAdditivesForm(SelectLanguageForm):
     additive_names = forms.CharField(required=True, max_length=2000, validators=[validate_comma_and_empty_name],
                                      error_messages={'required': "Food additive name cannot be an empty string!"})
-    language = forms.ChoiceField(choices=Languages)

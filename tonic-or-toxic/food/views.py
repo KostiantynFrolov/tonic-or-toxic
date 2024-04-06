@@ -4,9 +4,15 @@ from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import HttpResponse, render, redirect
-from .forms import SignupForm, LoginForm, SearchAdditiveForm, SearchAdditivesForm
+from .forms import (SignupForm, LoginForm, SearchAdditiveForm, SearchAdditivesForm,
+                    SelectLanguageForm)
 from .models import ToxicantEN, ToxicantPL, Toxicant
 from django.contrib import messages
+from paddleocr import PaddleOCR
+import os
+import tkinter
+from tkinter import filedialog
+
 
 class HomepageView(View):
     def get(self, request):
@@ -70,16 +76,11 @@ class SearchAdditiveView(LoginRequiredMixin, View):
         form = self.form(request.POST)
         if form.is_valid():
             if form.cleaned_data['language'] == '1':
-                try:
-                    result = ToxicantEN.objects.get(names__icontains=form.cleaned_data['additive_name'])
-                except ToxicantEN.DoesNotExist:
-                    result = None
-                except ToxicantEN.MultipleObjectsReturned:
-                    result = ToxicantEN.objects.filter(names__icontains=form.cleaned_data['additive_name']).first()
+                result = ToxicantEN.objects.filter(names__icontains=form.cleaned_data['additive_name'].strip()).first()
                 if result:
                     result = Toxicant.objects.get(toxicant_en=result)
             else:
-                result = ToxicantPL.objects.filter(names__icontains=form.cleaned_data['additive_name']).first()
+                result = ToxicantPL.objects.filter(names__icontains=form.cleaned_data['additive_name'].strip()).first()
                 if result:
                     result = Toxicant.objects.get(toxicant_pl=result)
             return render(request, 'result.html', {'result': result})
@@ -98,12 +99,7 @@ class SearchAdditivesView(SearchAdditiveView):
             results = []
             if form.cleaned_data['language'] == '1':
                 for additive_name in additive_names_split:
-                    try:
-                        result = ToxicantEN.objects.get(names__icontains=additive_name.strip())
-                    except ToxicantEN.DoesNotExist:
-                        result = None
-                    except ToxicantEN.MultipleObjectsReturned:
-                        result = ToxicantEN.objects.filter(names__icontains=additive_name.strip()).first()
+                    result = ToxicantEN.objects.filter(names__icontains=additive_name.strip()).first()
                     if result:
                         result = Toxicant.objects.get(toxicant_en=result)
                         results.append(result)
@@ -121,6 +117,23 @@ class SearchAdditivesView(SearchAdditiveView):
 class AdditiveDetailsView(LoginRequiredMixin, View):
     def get(self, request, additive_id):
         return render(request, 'result.html', {'result': Toxicant.objects.get(id=additive_id)})
+
+
+class SearchAdditivesByPhoto(LoginRequiredMixin, View):
+    login_url = '/login_url'
+    form = SelectLanguageForm
+    html = 'search_additives_by_photo.html'
+
+    def get(self, request):
+        root = tkinter.Tk()
+        root.withdraw()
+        image_path = filedialog.askopenfilename()
+        return render(request, self.html, {'form': self.form, 'image_path': image_path})
+
+
+
+
+
 
 
 
