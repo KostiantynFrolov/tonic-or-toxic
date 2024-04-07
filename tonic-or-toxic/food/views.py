@@ -24,7 +24,7 @@ class HomepageView(View):
 class SignupView(CreateView):
     form_class = SignupForm
     template_name = 'signup.html'
-    success_url = reverse_lazy('food:homepage')
+    success_url = reverse_lazy('food:login')
 
 
 class LoginView(View):
