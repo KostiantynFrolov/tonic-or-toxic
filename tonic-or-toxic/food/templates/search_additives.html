@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block title %}
 Search additives
@@ -12,24 +12,25 @@ Search additives
       {% endfor %}
     </ul>
   {% endif %}
-    <form action="" method="post">
-      {% csrf_token %}
-      <div class="form-control">
-        {{ form.additive_names.label_tag }}
-        {{ form.additive_names }}
-      <div class="help-text">Please provide the names of at least
-            two food additives separated by comma that you wish to check</div>
+  <form action="" method="post">
+    {% csrf_token %}
+    <div class="form-control">
+      {{ form.additive_names.label_tag }}
+      {{ form.additive_names }}
+      <div class="help-text">Please enter or paste the names of at least
+            two food additives separated by comma that you wish to check<br>
+          If a name consists of two or more words, use only one space between them
       </div>
-      <div class="form-control select">
-        {{ form.language.label_tag }}
-        {{ form.language }}
-        <div class="help-text">Please choose the language
-            for the name of the food additive
-        </div>
+    </div>
+    <div class="form-control select">
+      {{ form.language.label_tag }}
+      {{ form.language }}
+      <div class="help-text">Please choose the language
+            for the names of the food additives
       </div>
-      <div class="button-container">
-        <button class='button-link' type="submit">Search</button>
-      </div>
-    </form>
-
+    </div>
+    <div class="button-container centered">
+      <button class="button-link" type="submit">Search</button>
+    </div>
+  </form>
 {% endblock main %}

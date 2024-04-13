@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block title %}
 Search additive
@@ -17,7 +17,7 @@ Search additive
     <div class="form-control">
         {{ form.additive_name.label_tag }}
         {{ form.additive_name }}
-        <div class="help-text">Please provide
+        <div class="help-text">Please enter or paste
             the name of the food additive you wish to check</div>
     </div>
     <div class="form-control select">
@@ -27,9 +27,7 @@ Search additive
             for the name of the food additive</div>
     </div>
     <div class="button-container centered">
-        <button class='button-link' type="submit">Search</button>
+        <button class="button-link" type="submit">Search</button>
     </div>
-    </form>
-
-
+  </form>
 {% endblock main %}

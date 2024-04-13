@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Search additives by photo
+{% endblock title %}
+
+{% block main %}
+
+  Selected language : {{ language }}<br>
+    lang rec : {{ lang_rec }}<br>
+    x_dpi : {{ x_dpi }}<br>
+    y_dpi : {{ y_dpi }}<br>
+    Recognized text : <br>{{ recognized_text }}<br>
+    Recognized text checked :<br> {{ recognized_text_checked }}<br>
+    Recognized text from ingredients : <br>{{ recognized_text_from_ingredients }}<br>
+    Recognized text prepared :<br> {{ recognized_text_prepared }}<br>
+    Recognized text final:<br> {{ recognized_text_final }}<br>
+    List of additives:<br> {{ list_of_additives }}<br>
+    {% if results %}
+        {% for result in results %}
+        {{ result.toxicant_en.name }}<br>
+        {% endfor %}
+    {% else %}
+    No results)
+    {% endif %}
+
+    <div class="button-container centered">
+      <a href="{% url 'food:dashboard' %}" class="button-link">Back to the dashboard</a>
+    </div>
+
+{% endblock main %}

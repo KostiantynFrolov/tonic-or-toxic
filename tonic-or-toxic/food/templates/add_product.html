@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Add product
+{% endblock title %}
+
+{% block main %}
+    <h1>Add product</h1>
+  {% if form.errors %}
+    <div class="message error">
+      {% for field, errors in form.errors.items %}
+        {% for error in errors %}
+          {{ error }}<br>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  {% endif %}
+  <form action="" method="post">
+    {% csrf_token %}
+    <div class="form-control">
+        {{ form.name.label_tag }}
+        {{ form.name }}
+    </div>
+    <div class="form-control">
+        {{ form.manufacturer.label_tag }}
+        {{ form.manufacturer }}
+    </div>
+    <div class="form-control">
+        {{ form.toxicants.label_tag }}
+        {{ form.toxicants }}
+    </div>
+    <div class="button-container centered">
+        <button class='button-link' type="submit">Add</button>
+    </div>
+  </form>
+{% endblock main %}

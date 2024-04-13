@@ -16,14 +16,19 @@ class ToxicantPL(models.Model):
 
 
 class Toxicant(models.Model):
+    LOW = 'l'
+    MODERATE = 'm'
+    HIGH = 'h'
+    VERY_HIGH = 'vh'
+    TOXICANTS_SCALE = (
+        (LOW, 'low'),
+        (MODERATE, 'moderate'),
+        (HIGH, 'high'),
+        (VERY_HIGH, 'very high')
+    )
     toxicant_en = models.OneToOneField(ToxicantEN, on_delete=models.CASCADE, null=True)
     toxicant_pl = models.OneToOneField(ToxicantPL, on_delete=models.CASCADE, null=True)
-    scale = models.CharField(max_length=10, choices=(
-        ('low', 'low'),
-        ('moderate', 'moderate'),
-        ('high', 'high'),
-        ('very high', 'very high')
-    ))
+    scale = models.CharField(max_length=10, choices=TOXICANTS_SCALE)
 
 
 class Product(models.Model):
@@ -31,4 +36,9 @@ class Product(models.Model):
     manufacturer = models.CharField(max_length=100, blank=True)
     toxicants = models.ManyToManyField(Toxicant)
     adding_date = models.DateField(auto_now_add=True)
+
+
+class Image(models.Model):
+    title = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='images/')
 

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}
+Harmful products
+{% endblock title %}
+
+{% block main %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+        {{ message }}<br>
+      </div>
+    {% endfor %}
+  {% endif %}
+  {% if products %}
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Manufacturer</th>
+          <th>Harmful additives</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in products %}
+          <tr>
+            <td>{{ product.name }}</td>
+            <td>{{ product.manufacturer }}</td>
+            <td>{% for toxicant in product.toxicants.all %}
+                <a href="{% url 'food:additive_details' toxicant.id %}">
+                {{ toxicant.toxicant_en.name }}</a>
+                {% if not forloop.last %}, {% endif %}
+                {% endfor %}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>There is no harmful products in our database!</p>
+  {% endif %}
+  <div class="button-container centered">
+    <a href="{% url 'food:dashboard' %}" class="button-link">Back to the dashboard</a>
+  </div>
+{% endblock %}

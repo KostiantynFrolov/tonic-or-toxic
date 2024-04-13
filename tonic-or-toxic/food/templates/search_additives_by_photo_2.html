@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Search additives by photo
+{% endblock title %}
+
+{% block main %}
+
+  <h1>Step 2 - Upload a photo</h1>
+    <p class="long-text">Begin by capturing a high-quality, clear photo at
+        approximately 200 pixels per inch (ppi). Utilize grid lines, and device
+        suggestions to optimize the outcome, avoiding
+        the use of flash. Ensure that the entire text, including the list of
+        food ingredients, is distinctly visible from beginning to end and
+        arranged horizontally. Trim out any extraneous elements from the
+        image. Your photo will have a crucial impact on the effectiveness!
+        For reference, please see the example provided below.
+    </p>
+    {% if language == 'en' %}
+    <div class="example">
+      <img src="{% static 'images/example_en.jpg' %}" alt="Example of photo">
+    </div>
+    {% else %}
+    <div class="example">
+      <img src="{% static 'images/example_pl.jpg' %}" alt="Example of photo">
+    </div>
+    {% endif %}
+    <p class="long-text">Afterward, proceed to upload the photo.</p>
+    <form action="" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+        {{ wizard.management_form }}
+    <div class="form-control select">
+        {{ wizard.form.title.label_tag }}
+        {{ wizard.form.title }}
+    </div>
+    <div class="form-control select">
+        {{ wizard.form.image.label_tag }}
+        {{ wizard.form.image }}
+    </div>
+    <div class="button-container centered">
+        <button class='button-link' type="submit">Next</button>
+    </div>
+    </form>
+
+
+{% endblock main %}

@@ -1,17 +1,29 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block title %}
 Dashboard
 {% endblock title %}
 
 {% block main %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+        {{ message }}<br>
+      </div>
+    {% endfor %}
+  {% endif %}
     <div class="button-container special">
-      <a href="{% url 'food:search_additive' %}" class="button-link special">Concerned about
-          food additive?<br>Search by name!</a>
-      <a href="{% url 'food:search_additives' %}" class="button-link special">Checking several food additives?<br>
-          Experience our multi-name search!</a>
-      <a href="{% url 'food:search_additives_by_photo' %}" class="button-link special">Unlock the power of visual search!<br>
-      Try our AI-driven solution!</a>
+      <a href="{% url 'food:search_additive' %}" class="button-link special">
+          Concerned about food additive?<br>Search by name!</a>
+      <a href="{% url 'food:search_additives' %}" class="button-link special">
+          Checking several food additives?<br>Experience our multi-name search!</a>
+      <a href="{% url 'food:search_additives_by_photo' %}" class="button-link special">
+          Unlock the power of visual search!<br>Try our AI-driven solution!</a>
+      {% if "food.add_product" in request.user.get_all_permissions %}
+        <a href="{% url 'food:show_harmful_products' %}" class="button-link special">
+            Adding harmful products?<br>View our collection of them!</a>
+      {% endif %}
+
     </div>
     <p class="long-text">Our website's "Tonic or Toxic" rating system for harmful additives provides users
         with valuable insights into the safety of various ingredients. Utilizing a comprehensive

@@ -1,46 +1,46 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block title %}
 Signup
 {% endblock title %}
 
 {% block main %}
-    <h1>Signup</h1>
+  <h1>Signup</h1>
   {% if form.errors %}
-    <ul class="error-message">
+    <div class="message error">
       {% for field, errors in form.errors.items %}
         {% for error in errors %}
-          <li>{{ error }}</li>
+          {{ error }}<br>
         {% endfor %}
       {% endfor %}
-    </ul>
+    </div>
   {% endif %}
   <form action="" method="post">
     {% csrf_token %}
     <div class="form-control">
-        {{ form.username.label_tag }}
-        {{ form.username }}
+      {{ form.username.label_tag }}
+      {{ form.username }}
     </div>
     <div class="form-control">
-        {{ form.password1.label_tag }}
-        {{ form.password1 }}
-        <div class="help-text">Password must be at
+      {{ form.password1.label_tag }}
+      {{ form.password1 }}
+      <div class="help-text">Password must be at
             least 8 characters long,
             include both uppercase and lowercase letters,
             have at least one number and one special character,
             not be common or similar to username
-        </div>
+      </div>
     </div>
     <div class="form-control">
-        {{ form.password2.label_tag }}
-        {{ form.password2 }}
+      {{ form.password2.label_tag }}
+      {{ form.password2 }}
     </div>
     <div class="form-control">
-        {{ form.email.label_tag }}
-        {{ form.email }}
+      {{ form.email.label_tag }}
+      {{ form.email }}
     </div>
     <div class="button-container centered">
-        <button class='button-link' type="submit">Signup</button>
+      <button class="button-link" type="submit">Signup</button>
     </div>
   </form>
 {% endblock main %}

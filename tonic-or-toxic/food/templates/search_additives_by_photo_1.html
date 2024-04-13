@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}
+Search additives by photo
+{% endblock title %}
+
+{% block main %}
+  <h1>Step 1 - Select a language</h1>
+    <form action="" method="post">
+      {% csrf_token %}
+      {{ wizard.management_form }}
+        <div class="form-control select">
+          {{ wizard.form.language.label_tag }}
+          {{ wizard.form.language }}
+          <div class="help-text">Please choose the language
+            for the text representing the food additives
+          </div>
+        </div>
+        <div class="button-container centered">
+          <button class='button-link' type="submit">Next</button>
+        </div>
+    </form>
+
+{% endblock main %}

@@ -34,13 +34,21 @@
             justify-content: flex-end;
         }
 
+        .example img{
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+            height: auto;
+        }
+
         h1 {
-            font-family: 'Roboto', sans-serif;
+            font-family: "Roboto", sans-serif;
             text-align: center;
         }
 
         p {
-            font-family: 'Roboto', sans-serif;
+            font-family: "Roboto", sans-serif;
             font-size: 16px;
             line-height: 1.6;
             font-weight: 400;
@@ -123,11 +131,19 @@
             text-align: left;
         }
 
-        .error-message {
-            color: red;
+        .message {
             margin-top: 0.5em;
             margin-bottom: 0.5em;
+            margin-left: 0.5em;
             text-align: left;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
         }
 
         .form-control select {
