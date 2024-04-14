@@ -164,11 +164,11 @@ class SearchAdditivesByPhotoWizard(LoginRequiredMixin, SessionWizardView):
         image_path = image.image.url.replace(settings.MEDIA_URL, settings.MEDIA_ROOT)
 
         with Image.open(image_path) as img:
+            #x_dpi, y_dpi = img.info["dpi"]
             pillow_image_grey = img.convert("L")
             threshold = 128
             pillow_image_final = pillow_image_grey.point(lambda x: 0 if x < threshold else 255, "1")
             pillow_image_final.save(image_path)
-
 
         additives_beginning_pattern_polish = r"Sk(ł|t|l)adniki(:|.|S)"
         additives_beginning_pattern_english = "Ingredients:"
@@ -178,32 +178,30 @@ class SearchAdditivesByPhotoWizard(LoginRequiredMixin, SessionWizardView):
         else:
             lang_rec = 'pol'
             additives_beginning_pattern = additives_beginning_pattern_polish
-        recognized_text = pytesseract.image_to_string(image_path, lang=lang_rec, config="--psm 6")
+        recognized_text = pytesseract.image_to_string(image_path, lang=lang_rec, config="--psm 3")
         os.remove(image_path)
         image.delete()
 
-        recognized_text_from_ingredients = ""
-
-        for beginning in additives_beginning_pattern:
-            if beginning in recognized_text:
-                recognized_text_from_ingredients = recognized_text.split(beginning)[1]
-        if not recognized_text_from_ingredients:
-            return HttpResponse("Beginning of additives is not recognized")
+        recognized_text_from_ingredients = re.split(additives_beginning_pattern, recognized_text)[1]
+        if recognized_text_from_ingredients[0] == recognized_text:
+            return render(self.request, "results.html",
+                          {"message": "The image quality is low. Try again or capture a new photo"})
         recognized_text_prepared = recognized_text_from_ingredients.split(".")[0]
-
-        recognized_text_final = (recognized_text_prepared.replace("*", "").replace("'", "").replace("\"", "")
-                .replace("emulsifier:", "").replace("emulgator:", "").replace(",,", ",")
-                .replace("’", "").replace("”", "").replace("substancje konserwujące:", ""))
-
-        base_list_of_additives = recognized_text_final.split(",")
-        list_of_additives = [item.replace("\n", " ") for item in base_list_of_additives]
+        additional_words_pattern = r"[a-ząćęłńóśźżA-ZĄĆĘŁÓŚŃŻŹ0-9- ]{3,}(:)"
+        recognized_text_only_additives = re.sub(additional_words_pattern, "", recognized_text_prepared)
+        recognized_text_without_newline = recognized_text_only_additives.replace("\n", " ")
+        additives_pattern = r"[a-ząćęłńóśźżA-ZĄĆĘŁÓŚŃŻŹ0-9- ]{3,}"
+        list_of_additives = re.findall(additives_pattern, recognized_text_without_newline)
         """return render(self.request, 'done.html', {
                     'language': language,
+                    'x_dpi': x_dpi,
+                    'y_dpi': y_dpi,
                     'lang_rec': lang_rec,
                     'recognized_text': recognized_text,
                     'recognized_text_from_ingredients': recognized_text_from_ingredients,
                     'recognized_text_prepared': recognized_text_prepared,
-                    'recognized_text_final': recognized_text_final,
+                    'recognized_text_only_additives': recognized_text_only_additives,
+                    'recognized_text_without_newline': recognized_text_without_newline,
                     'list_of_additives': list_of_additives})"""
         return check_food_additives(self.request, language=language, food_additives=list_of_additives)
 

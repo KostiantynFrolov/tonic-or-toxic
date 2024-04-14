@@ -5,35 +5,39 @@ Results
 {% endblock title %}
 
 {% block main %}
-  {% if results %}
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Level of harmfulness</th>
-          <th>More info</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for result in results %}
-          <tr>
-            <td>{{ result.toxicant_en.name }}</td>
-            <td>{{ result.get_scale_display }}</td>
-            <td><a href="{% url 'food:additive_details' result.id %}">See details</a></td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  {% if message %}
+    <p>{{ message }}</p>
   {% else %}
-    <p>There is no harmful food additives like this in our database!</p>
-  {% endif %}
-  {% if results and "food.add_product" in request.user.get_all_permissions %}
-    <div class="button-container centered">
-    <a href="{% url 'food:add_harmful_product' results_id  %}" class="button-link">
-        Add to the list of harmful products</a>
-  </div>
+    {% if results %}
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Level of harmfulness</th>
+            <th>More info</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for result in results %}
+            <tr>
+              <td>{{ result.toxicant_en.name }}</td>
+              <td>{{ result.get_scale_display }}</td>
+              <td><a href="{% url 'food:additive_details' result.id %}">See details</a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>There is no harmful food additives like this in our database!</p>
     {% endif %}
-  <div class="button-container centered">
-    <a href="{% url 'food:dashboard' %}" class="button-link">Back to the dashboard</a>
-  </div>
+    {% if results and "food.add_product" in request.user.get_all_permissions %}
+      <div class="button-container centered">
+        <a href="{% url 'food:add_harmful_product' results_id  %}" class="button-link">
+          Add to the list of harmful products</a>
+      </div>
+    {% endif %}
+    <div class="button-container centered">
+      <a href="{% url 'food:dashboard' %}" class="button-link">Back to the dashboard</a>
+    </div>
+  {% endif %}
 {% endblock %}
