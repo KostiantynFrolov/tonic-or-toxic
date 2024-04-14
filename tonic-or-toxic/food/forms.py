@@ -30,22 +30,28 @@ class SelectLanguageForm(forms.Form):
         (POLISH, "Polish"))
     language = forms.ChoiceField(choices=LANGUAGES_CHOICES)
 
+def validate_space_between_words(name):
+    if " " in name.strip():
+        if len(name.strip()) - len(name.strip().replace(" ", "")) != 1:
+            raise forms.ValidationError("Food additive name should have only one space between words!")
 
 class SearchAdditiveForm(SelectLanguageForm):
-    additive_name = forms.CharField(required=True, max_length=50,
+    additive_name = forms.CharField(required=True, max_length=50, validators=[validate_space_between_words],
                                     error_messages={"required": "Food additive name cannot be an empty string!"})
 
 
-def validate_comma_and_empty_name(names):
+def validate_comma_empty_name_space_between_words(names):
     if "," not in names:
         raise forms.ValidationError("Food additive names must be separated by commas!")
     for name in names.split(","):
         if len(name.strip()) == 0:
             raise forms.ValidationError("Food additive name cannot be an empty string!")
+        validate_space_between_words(name)
+
 
 class SearchAdditivesForm(SelectLanguageForm):
-    additive_names = forms.CharField(required=True, max_length=2000, validators=[validate_comma_and_empty_name],
-                                     error_messages={"required": "Food additive name cannot be an empty string!"})
+    additive_names = forms.CharField(required=True, max_length=2000, validators=[validate_comma_empty_name_space_between_words],
+                                     error_messages={"required": "Food additive names cannot be an empty string!"})
 
 
 class ImageForm(forms.ModelForm):

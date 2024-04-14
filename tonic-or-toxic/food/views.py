@@ -14,6 +14,7 @@ from formtools.wizard.views import SessionWizardView
 import os
 from PIL import Image
 import pytesseract
+import re
 
 
 
@@ -161,34 +162,39 @@ class SearchAdditivesByPhotoWizard(LoginRequiredMixin, SessionWizardView):
         image_form = form_list[1]
         image = image_form.save()
         image_path = image.image.url.replace(settings.MEDIA_URL, settings.MEDIA_ROOT)
+
         with Image.open(image_path) as img:
             pillow_image_grey = img.convert("L")
             threshold = 128
             pillow_image_final = pillow_image_grey.point(lambda x: 0 if x < threshold else 255, "1")
             pillow_image_final.save(image_path)
 
-        additives_beginnings_polish = ('Składniki:', 'Sktadniki:', 'Skladniki.', 'Składniki.', "SkładnikiS")
-        additives_beginnings_english = ("Ingredients:",)
+
+        additives_beginning_pattern_polish = r"Sk(ł|t|l)adniki(:|.|S)"
+        additives_beginning_pattern_english = "Ingredients:"
         if language == 'en':
             lang_rec = 'eng'
-            additives_beginnings = additives_beginnings_english
+            additives_beginning_pattern = additives_beginning_pattern_english
         else:
             lang_rec = 'pol'
-            additives_beginnings = additives_beginnings_polish
+            additives_beginning_pattern = additives_beginning_pattern_polish
         recognized_text = pytesseract.image_to_string(image_path, lang=lang_rec, config="--psm 6")
         os.remove(image_path)
         image.delete()
 
         recognized_text_from_ingredients = ""
-        for beginning in additives_beginnings:
+
+        for beginning in additives_beginning_pattern:
             if beginning in recognized_text:
                 recognized_text_from_ingredients = recognized_text.split(beginning)[1]
         if not recognized_text_from_ingredients:
             return HttpResponse("Beginning of additives is not recognized")
         recognized_text_prepared = recognized_text_from_ingredients.split(".")[0]
+
         recognized_text_final = (recognized_text_prepared.replace("*", "").replace("'", "").replace("\"", "")
                 .replace("emulsifier:", "").replace("emulgator:", "").replace(",,", ",")
                 .replace("’", "").replace("”", "").replace("substancje konserwujące:", ""))
+
         base_list_of_additives = recognized_text_final.split(",")
         list_of_additives = [item.replace("\n", " ") for item in base_list_of_additives]
         """return render(self.request, 'done.html', {

@@ -6,11 +6,11 @@ Search additives
 
 {% block main %}
   {% if form.additive_names.errors %}
-    <ul class="error-message">
+    <div class="message error">
       {% for error in form.additive_names.errors %}
-        <li>{{ error }}</li>
+        {{ error }}
       {% endfor %}
-    </ul>
+    </div>
   {% endif %}
   <form action="" method="post">
     {% csrf_token %}

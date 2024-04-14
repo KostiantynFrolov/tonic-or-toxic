@@ -6,19 +6,21 @@ Search additive
 
 {% block main %}
   {% if form.additive_name.errors %}
-    <ul class="error-message">
+    <div class="message error">
       {% for error in form.additive_name.errors %}
-        <li>{{ error }}</li>
+        {{ error }}
       {% endfor %}
-    </ul>
+    </div>
   {% endif %}
   <form action="" method="post">
     {% csrf_token %}
     <div class="form-control">
-        {{ form.additive_name.label_tag }}
-        {{ form.additive_name }}
-        <div class="help-text">Please enter or paste
-            the name of the food additive you wish to check</div>
+      {{ form.additive_name.label_tag }}
+      {{ form.additive_name }}
+      <div class="help-text">Please enter or paste
+        the name of the food additive you wish to check<br>
+        If a name consists of two or more words, use only one space between them
+      </div>
     </div>
     <div class="form-control select">
         {{ form.language.label_tag }}
