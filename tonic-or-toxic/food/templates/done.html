@@ -11,18 +11,12 @@ Search additives by photo
     x_dpi : {{ x_dpi }}<br>
     y_dpi : {{ y_dpi }}<br>
     Recognized text : <br>{{ recognized_text }}<br>
-    Recognized text from ingredients : <br>{{ recognized_text_from_ingredients }}<br>
-    Recognized text prepared :<br> {{ recognized_text_prepared }}<br>
-    Recognized text only additives :<br> {{ recognized_text_only_additives }}<br>
-    Recognized text without newline :<br> {{ recognized_text_without_newline }}
+    Recognized text from ingredients : <br>{{ text_from_ingredients }}<br>
+    Recognized text prepared :<br> {{ text_prepared }}<br>
+    Recognized text without newline :<br> {{ text_without_newline }}
+    Recognized text only additives :<br> {{ text_only_additives }}<br>
     List of additives:<br>{{ list_of_additives }}<br>
-    {% if results %}
-        {% for result in results %}
-        {{ result.toxicant_en.name }}<br>
-        {% endfor %}
-    {% else %}
-    No results)
-    {% endif %}
+
 
     <div class="button-container centered">
       <a href="{% url 'food:dashboard' %}" class="button-link">Back to the dashboard</a>

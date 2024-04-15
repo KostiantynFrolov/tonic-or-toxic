@@ -26,8 +26,10 @@ class Toxicant(models.Model):
         (HIGH, 'high'),
         (VERY_HIGH, 'very high')
     )
-    toxicant_en = models.OneToOneField(ToxicantEN, on_delete=models.CASCADE, null=True)
-    toxicant_pl = models.OneToOneField(ToxicantPL, on_delete=models.CASCADE, null=True)
+    toxicant_en = models.OneToOneField(
+        ToxicantEN, on_delete=models.CASCADE, null=True)
+    toxicant_pl = models.OneToOneField(
+        ToxicantPL, on_delete=models.CASCADE, null=True)
     scale = models.CharField(max_length=10, choices=TOXICANTS_SCALE)
 
 
@@ -40,4 +42,3 @@ class Product(models.Model):
 
 class Image(models.Model):
     image = models.ImageField(upload_to='images/')
-
