@@ -178,14 +178,14 @@ class SearchAdditivesByPhotoWizard(LoginRequiredMixin, SessionWizardView):
             settings.MEDIA_URL, settings.MEDIA_ROOT)
 
         with Image.open(image_path) as img:
-            x_dpi, y_dpi = img.info["dpi"]
+            # x_dpi, y_dpi = img.info["dpi"]
             pillow_image_grey = img.convert("L")
             threshold = 128
             pillow_image_final = pillow_image_grey.point(
                 lambda x: 0 if x < threshold else 255, "1")
             pillow_image_final.save(image_path)
 
-        beginning_pattern_polish = r"Sk[łtl]adniki[:\.S]"
+        beginning_pattern_polish = r"(Sk[łtl]adniki[:\.S])"
         beginning_pattern_english = "Ingredients:"
         if language == 'en':
             lang_rec = 'eng'
@@ -198,17 +198,17 @@ class SearchAdditivesByPhotoWizard(LoginRequiredMixin, SessionWizardView):
         os.remove(image_path)
         image.delete()
 
+        text_without_newline = recognized_text.replace("\n", " ")
         text_from_ingredients = re.split(
-            beginning_pattern, recognized_text)[1]
-        if text_from_ingredients[0] == recognized_text:
+            beginning_pattern, text_without_newline)[2]
+        if text_from_ingredients[0] == text_without_newline:
             return render(self.request, "results.html",
                           {"message": "The image quality is low."
                            " Try again or capture a new photo"})
         text_prepared = text_from_ingredients.split(".")[0]
-        text_without_newline = text_prepared.replace("\n", " ")
         additional_words_pattern = r"([a-ząćęłńóśźżA-ZĄĆĘŁÓŚŃŻŹ0-9- ]{3,}:)"
         text_only_additives = re.sub(
-            additional_words_pattern, "", text_without_newline)
+            additional_words_pattern, "", text_prepared)
         additives_pattern = r"[a-ząćęłńóśźżA-ZĄĆĘŁÓŚŃŻŹ0-9- ]{3,}"
         list_of_additives = re.findall(additives_pattern, text_only_additives)
         """return render(self.request, 'done.html', {
