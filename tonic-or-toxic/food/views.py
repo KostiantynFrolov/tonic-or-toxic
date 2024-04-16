@@ -79,33 +79,6 @@ class DashboardView(LoginRequiredMixin, View):
         return render(request, "dashboard.html")
 
 
-class SearchAdditiveView(LoginRequiredMixin, View):
-    login_url = "food:login"
-    form = SearchAdditiveForm
-    html = "search_additive.html"
-
-    def get(self, request, *args, **kwargs):
-        return render(request, self.html, {"form": self.form})
-
-    def post(self, request, *args, **kwargs):
-        form = self.form(request.POST)
-        if form.is_valid():
-            additive_name = form.cleaned_data["additive_name"].strip()
-            if form.cleaned_data["language"] == "en":
-                result = ToxicantEN.objects.filter(
-                    names__icontains=additive_name).first()
-                if result:
-                    result = Toxicant.objects.get(toxicant_en=result)
-            else:
-                result = ToxicantPL.objects.filter(
-                    names__icontains=additive_name).first()
-                if result:
-                    result = Toxicant.objects.get(toxicant_pl=result)
-            return render(request, "result.html", {"result": result})
-        else:
-            return render(request, self.html, {"form": form})
-
-
 def check_food_additives(request, language, food_additives):
     results = []
     if language == "en":
@@ -122,10 +95,29 @@ def check_food_additives(request, language, food_additives):
             if result:
                 result = Toxicant.objects.get(toxicant_pl=result)
                 results.append(result)
-    results_id = ",".join(
-        [str(tox.id) for tox in set(results)]) if results else ""
+    results_id = ",".join([str(tox.id) for tox in set(results)]) if results else ""
     return render(request, "results.html",
                   {"results": set(results), "results_id": results_id})
+
+
+class SearchAdditiveView(LoginRequiredMixin, View):
+    login_url = "food:login"
+    form = SearchAdditiveForm
+    html = "search_additive.html"
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.html, {"form": self.form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form(request.POST)
+        if form.is_valid():
+            additive_name = []
+            additive_name.append(form.cleaned_data["additive_name"])
+            return check_food_additives(
+                self.request, language=form.cleaned_data["language"],
+                food_additives=additive_name)
+        else:
+            return render(request, self.html, {"form": form})
 
 
 class SearchAdditivesView(SearchAdditiveView):
@@ -147,7 +139,7 @@ class AdditiveDetailsView(LoginRequiredMixin, View):
     login_url = "food:login"
 
     def get(self, request, additive_id):
-        return render(request, "result.html",
+        return render(request, "additive_details.html",
                       {"result": Toxicant.objects.get(pk=additive_id)})
 
 
