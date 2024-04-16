@@ -1,6 +1,7 @@
 from django import forms
-from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+
 from .models import Image, Product, Toxicant
 
 
@@ -44,18 +45,15 @@ class SearchAdditiveForm(SelectLanguageForm):
     additive_name = forms.CharField(
         required=True, max_length=50,
         validators=[validate_space_between_words],
-        error_messages={
-            "required": "Food additive name cannot be an empty string!"})
+        error_messages={"required": "Food additive name cannot be an empty string!"})
 
 
 def validate_comma_empty_name_space_between_words(names):
     if "," not in names:
-        raise forms.ValidationError(
-            "Food additive names must be separated by commas!")
+        raise forms.ValidationError("Food additive names must be separated by commas!")
     for name in names.split(","):
         if len(name.strip()) == 0:
-            raise forms.ValidationError(
-                "Food additive name cannot be an empty string!")
+            raise forms.ValidationError("Food additive name cannot be an empty string!")
         validate_space_between_words(name)
 
 
@@ -63,8 +61,7 @@ class SearchAdditivesForm(SelectLanguageForm):
     additive_names = forms.CharField(
         required=True, max_length=2000,
         validators=[validate_comma_empty_name_space_between_words],
-        error_messages={
-            "required": "Food additive names cannot be an empty string!"})
+        error_messages={"required": "Food additive names cannot be an empty string!"})
 
 
 class ImageForm(forms.ModelForm):

@@ -1,11 +1,10 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block title %}
 Search additives by photo
 {% endblock title %}
 
 {% block main %}
-
   Selected language : {{ language }}<br>
     lang rec : {{ lang_rec }}<br>
     x_dpi : {{ x_dpi }}<br>
@@ -16,10 +15,7 @@ Search additives by photo
     Recognized text prepared :<br> {{ text_prepared }}<br>
     Recognized text only additives :<br> {{ text_only_additives }}<br>
     List of additives:<br>{{ list_of_additives }}<br>
-
-
     <div class="button-container centered">
       <a href="{% url 'food:dashboard' %}" class="button-link">Back to the dashboard</a>
     </div>
-
 {% endblock main %}

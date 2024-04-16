@@ -1,22 +1,23 @@
-from django.core.files.storage.filesystem import FileSystemStorage
-from django.views import View
-from django.views.generic import CreateView
-from django.urls import reverse_lazy
+import os
+import re
+
+import pytesseract
+from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin)
-from django.shortcuts import render, redirect
-from .forms import (SignupForm, LoginForm, SearchAdditiveForm,
-                    SearchAdditivesForm, SelectLanguageForm,
-                    ImageForm, ProductForm)
-from .models import ToxicantEN, ToxicantPL, Toxicant, Product
-from django.contrib import messages
-from django.conf import settings
+from django.core.files.storage.filesystem import FileSystemStorage
+from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+from django.views import View
+from django.views.generic import CreateView
 from formtools.wizard.views import SessionWizardView
-import os
 from PIL import Image
-import pytesseract
-import re
+
+from .forms import (ImageForm, LoginForm, ProductForm, SearchAdditiveForm,
+                    SearchAdditivesForm, SelectLanguageForm, SignupForm)
+from .models import Product, Toxicant, ToxicantEN, ToxicantPL
 
 
 class HomepageView(View):
@@ -178,7 +179,6 @@ class SearchAdditivesByPhotoWizard(LoginRequiredMixin, SessionWizardView):
             settings.MEDIA_URL, settings.MEDIA_ROOT)
 
         with Image.open(image_path) as img:
-            # x_dpi, y_dpi = img.info["dpi"]
             pillow_image_grey = img.convert("L")
             threshold = 128
             pillow_image_final = pillow_image_grey.point(
@@ -211,20 +211,8 @@ class SearchAdditivesByPhotoWizard(LoginRequiredMixin, SessionWizardView):
             additional_words_pattern, "", text_prepared)
         additives_pattern = r"[a-ząćęłńóśźżA-ZĄĆĘŁÓŚŃŻŹ0-9- ]{3,}"
         list_of_additives = re.findall(additives_pattern, text_only_additives)
-        """return render(self.request, 'done.html', {
-                    'language': language,
-                    'x_dpi': x_dpi,
-                    'y_dpi': y_dpi,
-                    'lang_rec': lang_rec,
-                    'recognized_text': recognized_text,
-                    'text_from_ingredients': text_from_ingredients,
-                    'text_prepared': text_prepared,
-                    'text_without_newline': text_without_newline,
-                    'text_only_additives': text_only_additives,
-                    'list_of_additives': list_of_additives})"""
-        return check_food_additives(
-            self.request, language=language,
-            food_additives=list_of_additives)
+        return check_food_additives(self.request, language=language,
+                                    food_additives=list_of_additives)
 
 
 class AddHarmfulProductView(LoginRequiredMixin,
