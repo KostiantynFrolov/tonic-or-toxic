@@ -84,17 +84,15 @@ def check_food_additives(request, language, food_additives):
     results = []
     if language == "en":
         for food_additive in food_additives:
-            result = ToxicantEN.objects.filter(
-                names__icontains=food_additive.strip()).first()
+            result = Toxicant.objects.filter(
+                toxicant_en__names__icontains=food_additive.strip()).first()
             if result:
-                result = Toxicant.objects.get(toxicant_en=result)
                 results.append(result)
-    else:
+    elif language == "pl":
         for food_additive in food_additives:
-            result = ToxicantPL.objects.filter(
-                names__icontains=food_additive.strip()).first()
+            result = Toxicant.objects.filter(
+                toxicant_pl__names__icontains=food_additive.strip()).first()
             if result:
-                result = Toxicant.objects.get(toxicant_pl=result)
                 results.append(result)
     results_id = ",".join([str(tox.id) for tox in set(results)]) if results else ""
     return render(request, "results.html",
