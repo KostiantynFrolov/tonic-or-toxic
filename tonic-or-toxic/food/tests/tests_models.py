@@ -1,10 +1,12 @@
 import os
+
 import pytest
 from django.db import IntegrityError
 from django.utils import timezone
-from food.models import ToxicantEN, ToxicantPL, Toxicant, Product, Image
-@pytest.mark.django_db
+from food.models import Image, Product, Toxicant, ToxicantEN, ToxicantPL
 
+
+@pytest.mark.django_db
 def test_toxicanten_model(toxicant_en):
     tox_en = ToxicantEN.objects.get(name="dangerous toxicant")
     assert tox_en == toxicant_en
@@ -16,6 +18,7 @@ def test_toxicanten_model(toxicant_en):
         ToxicantEN.objects.create(
             name="bad toxicant", description="Created by humans",
             medical_risks="DNA damage", names="poison venom")
+
 
 @pytest.mark.django_db
 def test_toxicantpl_model(toxicant_pl):
@@ -30,12 +33,14 @@ def test_toxicantpl_model(toxicant_pl):
             name="zły toksynant", description="Stworzony przez ludzi",
             medical_risks="Uszkodzenie DNA", names="trucizna jad")
 
+
 @pytest.mark.django_db
 def test_toxicant(toxicant, toxicant_en, toxicant_pl):
     assert toxicant.scale == "vh"
     assert len(Toxicant.objects.all()) == 1
     assert toxicant.toxicant_en == toxicant_en
     assert toxicant.toxicant_pl == toxicant_pl
+
 
 @pytest.mark.django_db
 def test_product(product, toxicant):
@@ -47,6 +52,7 @@ def test_product(product, toxicant):
     assert len(Product.objects.all()) == 1
     assert prod.adding_date == timezone.now().date()
 
+
 @pytest.mark.django_db
 def test_image(image):
     img = Image.objects.first()
@@ -56,5 +62,3 @@ def test_image(image):
     assert len(Image.objects.all()) == 1
     if os.path.isfile(img.image.path):
         os.remove(img.image.path)
-
-

@@ -3,7 +3,6 @@ import re
 
 import pytesseract
 from PIL import Image
-
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -18,7 +17,7 @@ from formtools.wizard.views import SessionWizardView
 
 from .forms import (ImageForm, LoginForm, ProductForm, SearchAdditiveForm,
                     SearchAdditivesForm, SelectLanguageForm, SignupForm)
-from .models import Product, Toxicant, ToxicantEN, ToxicantPL
+from .models import Product, Toxicant
 
 
 class HomepageView(View):
@@ -34,6 +33,11 @@ class SignupView(CreateView):
     template_name = "signup.html"
     success_url = reverse_lazy("food:login")
 
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect("food:dashboard")
+        return super().get(request, *args, **kwargs)
+
     def form_valid(self, form):
         response = super().form_valid(form)
         messages.success(self.request, "Congratulations!"
@@ -42,14 +46,17 @@ class SignupView(CreateView):
 
 
 class LoginView(View):
-    form = LoginForm
+    form = LoginForm()
     html = "login.html"
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.html, {"form": self.form})
+        if request.user.is_authenticated:
+            return redirect("food:dashboard")
+        else:
+            return render(request, self.html, {"form": self.form})
 
     def post(self, request, *args, **kwargs):
-        form = self.form(request.POST)
+        form = LoginForm(request.POST)
         if form.is_valid():
             user = authenticate(username=form.cleaned_data["username"],
                                 password=form.cleaned_data["password"])
@@ -101,14 +108,14 @@ def check_food_additives(request, language, food_additives):
 
 class SearchAdditiveView(LoginRequiredMixin, View):
     login_url = "food:login"
-    form = SearchAdditiveForm
+    form = SearchAdditiveForm()
     html = "search_additive.html"
 
     def get(self, request, *args, **kwargs):
         return render(request, self.html, {"form": self.form})
 
     def post(self, request, *args, **kwargs):
-        form = self.form(request.POST)
+        form = SearchAdditiveForm(request.POST)
         if form.is_valid():
             additive_name = []
             additive_name.append(form.cleaned_data["additive_name"])
@@ -120,11 +127,11 @@ class SearchAdditiveView(LoginRequiredMixin, View):
 
 
 class SearchAdditivesView(SearchAdditiveView):
-    form = SearchAdditivesForm
+    form = SearchAdditivesForm()
     html = "search_additives.html"
 
     def post(self, request, *args, **kwargs):
-        form = self.form(request.POST)
+        form = SearchAdditivesForm(request.POST)
         if form.is_valid():
             additive_names = form.cleaned_data["additive_names"].split(",")
             return check_food_additives(
@@ -191,7 +198,7 @@ class SearchAdditivesByPhotoWizard(LoginRequiredMixin, SessionWizardView):
 
         text_without_newline = recognized_text.replace("\n", " ")
         text_from_ingredients = re.split(
-            beginning_pattern, text_without_newline)[2]
+            beginning_pattern, text_without_newline)[-1]
         if text_from_ingredients[0] == text_without_newline:
             return render(self.request, "results.html",
                           {"message": "The image quality is low."
