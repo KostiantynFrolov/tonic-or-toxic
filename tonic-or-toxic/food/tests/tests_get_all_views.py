@@ -173,4 +173,3 @@ def test_show_harmful_product_privileged_user_logged_in(
     assert response.status_code == 200
     assert response.templates[0].name == "show_harmful_products.html"
     assert len(response.context["products"]) == 1
-

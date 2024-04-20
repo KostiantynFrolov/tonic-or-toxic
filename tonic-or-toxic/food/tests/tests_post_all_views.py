@@ -37,7 +37,7 @@ def test_login_correct(client):
 
 @pytest.mark.django_db
 def test_login_incorrect(client):
-    user = User.objects.create_user(username="Jakub", password="Programming01!")
+    User.objects.create_user(username="Jakub", password="Programming01!")
     form_data = {"username": "Jakub", "password": "Programming"}
     response = client.post("/login/", form_data)
     messages = list(get_messages(response.wsgi_request))
@@ -47,4 +47,38 @@ def test_login_incorrect(client):
     assert str(messages[0]) == "Invalid username or password!"
 
 
+@pytest.mark.django_db
+def test_search_additive_en_correct(client, user, toxicant):
+    form_data = {"language": "en", "additive_name": "veno"}
+    response = client.post("/search-additive/", form_data)
+    assert response.status_code == 200
+    assert len(response.context["results"]) == 1
+    assert list(response.context["results"])[0].id == toxicant.id
+    assert int(response.context["results_id"].split(",")[0]) == toxicant.id
+
+
+@pytest.mark.django_db
+def test_search_additive_pl_correct(client, user, toxicant):
+    form_data = {"language": "pl", "additive_name": "jad"}
+    response = client.post("/search-additive/", form_data)
+    assert response.status_code == 200
+    assert len(response.context["results"]) == 1
+    assert list(response.context["results"])[0].id == toxicant.id
+    assert int(response.context["results_id"].split(",")[0]) == toxicant.id
+
+
+@pytest.mark.django_db
+def test_search_additive_en_no_name_in_database(client, user, toxicant):
+    form_data = {"language": "en", "additive_name": "trans fat"}
+    response = client.post("/search-additive/", form_data)
+    assert response.status_code == 200
+    assert len(response.context["results"]) == 0
+
+
+@pytest.mark.django_db
+def test_search_additive_pl_no_name_in_database(client, user, toxicant):
+    form_data = {"language": "pl", "additive_name": "azorubina"}
+    response = client.post("/search-additive/", form_data)
+    assert response.status_code == 200
+    assert len(response.context["results"]) == 0
 

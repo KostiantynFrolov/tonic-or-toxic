@@ -3,6 +3,8 @@ import re
 
 import pytesseract
 from PIL import Image
+from formtools.wizard.views import SessionWizardView
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -13,7 +15,6 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView
-from formtools.wizard.views import SessionWizardView
 
 from .forms import (ImageForm, LoginForm, ProductForm, SearchAdditiveForm,
                     SearchAdditivesForm, SelectLanguageForm, SignupForm)
