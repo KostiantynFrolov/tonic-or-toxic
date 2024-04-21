@@ -171,7 +171,7 @@ class SearchAdditivesByPhotoWizard(LoginRequiredMixin, SessionWizardView):
 
     def done(self, form_list, *args, **kwargs):
         form_data = [form.cleaned_data for form in form_list]
-        language = form_data[0]['language']
+        language = form_data[0]["language"]
         image_form = form_list[1]
         image = image_form.save()
         image_path = image.image.url.replace(
@@ -186,11 +186,11 @@ class SearchAdditivesByPhotoWizard(LoginRequiredMixin, SessionWizardView):
 
         beginning_pattern_polish = r"(Sk[łtl]adniki[:\.S])"
         beginning_pattern_english = "Ingredients:"
-        if language == 'en':
-            lang_rec = 'eng'
+        if language == "en":
+            lang_rec = "eng"
             beginning_pattern = beginning_pattern_english
         else:
-            lang_rec = 'pol'
+            lang_rec = "pol"
             beginning_pattern = beginning_pattern_polish
         recognized_text = pytesseract.image_to_string(
             image_path, lang=lang_rec, config="--psm 3")
@@ -216,11 +216,11 @@ class SearchAdditivesByPhotoWizard(LoginRequiredMixin, SessionWizardView):
 
 class AddHarmfulProductView(LoginRequiredMixin,
                             PermissionRequiredMixin, CreateView):
-    login_url = 'food:login'
+    login_url = "food:login"
     permission_required = "food.add_product"
     form_class = ProductForm
-    template_name = 'add_product.html'
-    success_url = reverse_lazy('food:show_harmful_products')
+    template_name = "add_product.html"
+    success_url = reverse_lazy("food:show_harmful_products")
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

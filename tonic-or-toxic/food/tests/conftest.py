@@ -12,6 +12,13 @@ def toxicant_en():
         medical_risks="cancer", names="poison venom")
     return test_toxicant_en
 
+@pytest.fixture()
+def toxicant_en_2():
+    test_toxicant_en_2 = ToxicantEN.objects.create(
+        name="aloe vera", description="Strange, but it's very harmful",
+        medical_risks="cancer", names="aloe vera true aloe")
+    return test_toxicant_en_2
+
 
 @pytest.fixture
 def toxicant_pl():
@@ -20,12 +27,26 @@ def toxicant_pl():
         medical_risks="nowotwór", names="trucizna jad")
     return test_toxicant_pl
 
+@pytest.fixture
+def toxicant_pl_2():
+    test_toxicant_pl_2 = ToxicantPL.objects.create(
+        name="aloe vera", description="Dziwne, ale jest bardzo szkodliwe",
+        medical_risks="nowotwór", names="aloe vera aloes właściwy")
+    return test_toxicant_pl_2
+
 
 @pytest.fixture
 def toxicant(toxicant_en, toxicant_pl):
     test_toxicant = Toxicant.objects.create(
         toxicant_en=toxicant_en, toxicant_pl=toxicant_pl, scale="vh")
     return test_toxicant
+
+
+@pytest.fixture
+def toxicant_2(toxicant_en_2, toxicant_pl_2):
+    test_toxicant_2 = Toxicant.objects.create(
+        toxicant_en=toxicant_en_2, toxicant_pl=toxicant_pl_2, scale="vh")
+    return test_toxicant_2
 
 
 @pytest.fixture

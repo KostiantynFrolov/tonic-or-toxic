@@ -18,6 +18,7 @@ Harmful products
         <tr>
           <th>Name</th>
           <th>Manufacturer</th>
+          <th>Adding date</th>
           <th>Harmful additives</th>
         </tr>
       </thead>
@@ -26,6 +27,7 @@ Harmful products
           <tr>
             <td>{{ product.name }}</td>
             <td>{{ product.manufacturer }}</td>
+            <td>{{ product.adding_date }}</td>
             <td>{% for toxicant in product.toxicants.all %}
                 <a href="{% url 'food:additive_details' toxicant.id %}">
                 {{ toxicant.toxicant_en.name }}</a>

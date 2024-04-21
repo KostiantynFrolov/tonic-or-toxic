@@ -115,8 +115,7 @@ def test_additive_details_user_logged_in(client, user, toxicant):
     response = client.get("/additive-details/1/")
     assert response.status_code == 200
     assert response.templates[0].name == "additive_details.html"
-    assert isinstance(response.context["result"], Toxicant)
-    assert response.context["result"].pk == toxicant.pk
+    assert response.context["result"] == toxicant
 
 
 def test_search_additives_by_photo_user_not_logged_in(client):
@@ -140,18 +139,30 @@ def test_add_harmful_product_user_not_logged_in(client):
 
 
 @pytest.mark.django_db
-def test_add_harmful_product_user_logged_in(client, user, toxicant):
+def test_add_harmful_product_user_logged_in(client, user):
     response = client.get("/add-harmful-product/1/")
     assert response.status_code == 403
 
 
 @pytest.mark.django_db
-def test_add_harmful_product_privileged_user_logged_in(
+def test_add_harmful_product_with_one_toxicant_privileged_user_logged_in(
         client, privileged_user, toxicant):
-    response = client.get("/add-harmful-product/1/")
+    print(toxicant.id)
+    response = client.get(f"/add-harmful-product/{toxicant.id}/")
     assert response.status_code == 200
     assert response.templates[0].name == "add_product.html"
     assert isinstance(response.context["form"], ProductForm)
+    assert response.context["form"].fields["toxicants"].queryset.count() == 1
+
+
+@pytest.mark.django_db
+def test_add_harmful_product_with_two_toxicants_privileged_user_logged_in(
+        client, privileged_user, toxicant, toxicant_2):
+    response = client.get(f"/add-harmful-product/{toxicant.id},{toxicant_2.id}/")
+    assert response.status_code == 200
+    assert response.templates[0].name == "add_product.html"
+    assert isinstance(response.context["form"], ProductForm)
+    assert response.context["form"].fields["toxicants"].queryset.count() == 2
 
 
 def test_show_harmful_product_user_not_logged_in(client):
