@@ -1,6 +1,6 @@
 # tonic_or_toxic - health and wellness application 
 
-My first project developed to help people be more healthy 
+Welcome to my first project, developed to assist people in achieving better health 
 
 ## Table of contents
 * [General info](#general-info)
@@ -8,9 +8,8 @@ My first project developed to help people be more healthy
 * [Setup](#setup)
 
 ## General info
-
-The novel application assists users in selecting healthy foods.
-Unlike others, it analyzes food additives.
+The innovative application assists users in selecting healthy foods.
+Unlike other apps, it analyzes food additives.
 The application offers single and multi-name searches, as well as a photo-based check feature.
 It enhances user convenience and promotes healthier eating habits.
 
