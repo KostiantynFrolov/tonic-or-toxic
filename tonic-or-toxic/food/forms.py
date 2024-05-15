@@ -13,7 +13,7 @@ def validate_email_unique(value):
 
 
 class SignupForm(UserCreationForm):
-    email = forms.EmailField(required=True, validators=[validate_email_unique])
+    email = forms.EmailField(validators=[validate_email_unique])
 
     class Meta:
         model = User
@@ -21,8 +21,8 @@ class SignupForm(UserCreationForm):
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(required=True)
-    password = forms.CharField(widget=forms.PasswordInput, required=True)
+    username = forms.CharField(max_length=50)
+    password = forms.CharField(max_length=100, widget=forms.PasswordInput)
 
 
 class SelectLanguageForm(forms.Form):
@@ -43,7 +43,7 @@ def validate_space_between_words(name):
 
 class SearchAdditiveForm(SelectLanguageForm):
     additive_name = forms.CharField(
-        required=True, max_length=50,
+        max_length=50,
         validators=[validate_space_between_words],
         error_messages={"required": "Food additive name cannot be an empty string!"})
 
@@ -59,7 +59,7 @@ def validate_comma_empty_name_space_between_words(names):
 
 class SearchAdditivesForm(SelectLanguageForm):
     additive_names = forms.CharField(
-        required=True, max_length=2000,
+        max_length=2000,
         validators=[validate_comma_empty_name_space_between_words],
         error_messages={"required": "Food additive names cannot be an empty string!"})
 
