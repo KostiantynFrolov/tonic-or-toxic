@@ -1,6 +1,6 @@
 # tonic_or_toxic - health and wellness application 
 
-Welcome to my first project, developed to assist people in achieving better health 
+Welcome to my first own project, developed to assist people in achieving better health 
 
 ## Table of contents
 * [General info](#general-info)
