@@ -9,7 +9,7 @@ Welcome to my first own project, developed to assist people in achieving better 
 
 ## General info
 The innovative application assists users in selecting healthy foods.
-Unlike other apps, it analyzes food additives.
+Unlike other apps,this one stands out by analyzing food safety using a database of additives, not just products.
 The application offers single and multi-name searches, as well as a photo-based check feature.
 It enhances user convenience and promotes healthier eating habits.
 
