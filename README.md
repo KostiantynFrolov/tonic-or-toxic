@@ -31,7 +31,7 @@ Steps:
 * Clone the repository to your local machine
 * Create a virtual environment
 * Activate the virtual environment
-* Install the required packages using pip
+* Install the required packages
 * Ensure your Django settings are configured to use PostgreSQL. Update the "Database" settings in your settings.py file with your PostgreSQL database details.
 * Apply migrations
 * Start the Django server
