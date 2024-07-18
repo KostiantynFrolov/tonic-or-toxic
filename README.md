@@ -10,7 +10,7 @@ Welcome to my first own project, developed to assist people in achieving better 
 ## General info
 This is my final project for the Python Developer course at Coders Lab.
 This innovative application assists users in selecting healthy foods.
-Unlike other apps,this one stands out by analyzing food safety using a database of food additives, not just products.
+Unlike other apps, this one stands out by analyzing food safety using a database of food additives, not just products.
 The application offers single and multi-name searches, as well as a photo-based check feature.
 It enhances user convenience and promotes healthier eating habits.
 
