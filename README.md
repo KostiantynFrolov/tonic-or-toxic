@@ -38,7 +38,7 @@ Steps:
 * Apply migrations
 * Start the Django server
 
-##Sources
+## Sources
 This application uses information from [@ the Center for Science in the Public Interest](https://www.cspinet.org), an independent 
 food and health watchdog based in Washington.
 
