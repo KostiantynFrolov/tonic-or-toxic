@@ -19,8 +19,6 @@ It enhances user convenience and promotes healthier eating habits.
 Project is created with:
 * Python 3.8
 * Django 4.2.11
-* psycopg2-binary 2.9.9
-* django-environ 0.11.2
 * django-formtools 2.5.1
 * pytesseract 0.3.10
 
