@@ -6,6 +6,7 @@ Welcome to my first own project, developed to assist people in achieving better 
 * [General info](#general-info)
 * [Technologies](#technologies)
 * [Setup](#setup)
+* [Sources](#sources)
 
 ## General info
 This is my final project for the Python Developer course at Coders Lab.
@@ -33,9 +34,13 @@ Steps:
 * Create a virtual environment
 * Activate the virtual environment
 * Install the required packages
-* Ensure your Django settings are configured to use PostgreSQL. Update the "Database" settings in your settings.py file with your PostgreSQL database details.
+* Ensure your Django settings are configured to use PostgreSQL. Update the "Database" settings in your settings.py file with your PostgreSQL database details
 * Apply migrations
 * Start the Django server
+
+##Sources
+This application uses information from [@ the Center for Science in the Public Interest](https://www.cspinet.org), an independent 
+food and health watchdog based in Washington.
 
 
 
